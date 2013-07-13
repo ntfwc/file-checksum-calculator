@@ -10,10 +10,11 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.security.MessageDigest;
 import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
+
 public class FileDigester extends SwingWorker<Void, Void> implements PropertyChangeListener
 {
 	private static final int PROGRESS_BAR_SIZE = 100;
+	
 	private GUI gui;
 	private JProgressBar progressBar;
 	private JTextField outputBox;
@@ -22,6 +23,7 @@ public class FileDigester extends SwingWorker<Void, Void> implements PropertyCha
 	private InputStream fileInputStream;
 	private MessageDigest messageDigest;
 	private Exception exception;
+	
 	public FileDigester(GUI gui, JProgressBar progressBar, JTextField outputBox)
 	{
 		this.gui = gui;
@@ -29,26 +31,31 @@ public class FileDigester extends SwingWorker<Void, Void> implements PropertyCha
 		this.outputBox = outputBox;
 		addPropertyChangeListener(this);
 	}
+	
 	private void initProgress()
 	{
 		setProgress(0);
 		progressBar.setValue(0);
 	}
+	
 	private void recordFileSize(File file)
 	{
 		this.fileSize = file.length();
 		this.progressBlockSize = fileSize/PROGRESS_BAR_SIZE;
 	}
+	
 	private InputStream getInputStreamForFile(File file) throws IOException
 	{
 		return new BufferedInputStream(new FileInputStream(file));
 	}
+	
 	private void doDigest(File file, String algorithm) throws Exception
 	{
 		if (algorithm == null)
 		{
 			throw new Exception("No algorithm selected");
 		}
+		
 		this.messageDigest = MessageDigest.getInstance(algorithm);
 		this.fileInputStream = getInputStreamForFile(file);
 		this.exception = null;
@@ -56,14 +63,17 @@ public class FileDigester extends SwingWorker<Void, Void> implements PropertyCha
 		initProgress();
 		execute();
 	}
+	
 	private void showErrorMessage(String message)
 	{
 		JOptionPane.showMessageDialog(gui, message, "error", JOptionPane.ERROR_MESSAGE);
 	}
+	
 	private void showErrorMessage(Exception e)
 	{
 		showErrorMessage(e.getMessage());
 	}
+	
 	public void digest(File file, String algorithm)
 	{
 		try
@@ -76,6 +86,7 @@ public class FileDigester extends SwingWorker<Void, Void> implements PropertyCha
 			gui.enableInputComponents();
 		}
 	}
+	
 	private void updateProgress(long lengthOfDataRead)
 	{
 		int newProgress = (int) (lengthOfDataRead/progressBlockSize);
@@ -84,6 +95,7 @@ public class FileDigester extends SwingWorker<Void, Void> implements PropertyCha
 			setProgress(newProgress);
 		}
 	}
+	
 	private void performDigest() throws IOException
 	{
 		byte[] buffer = new byte[1024];
@@ -101,6 +113,7 @@ public class FileDigester extends SwingWorker<Void, Void> implements PropertyCha
 		}
 		fileInputStream.close();
 	}
+	
 	@Override
 	protected Void doInBackground()
 	{
@@ -114,6 +127,7 @@ public class FileDigester extends SwingWorker<Void, Void> implements PropertyCha
 		}
 		return null;
 	}
+	
 	private static void addHexCode(StringBuilder sb, byte b)
 	{
 		String code = Integer.toHexString(UnsignedConversion.convertToUnsigned(b));
@@ -123,6 +137,7 @@ public class FileDigester extends SwingWorker<Void, Void> implements PropertyCha
 		}
 		sb.append(code);
 	}
+	
 	private static String createHexString(byte[] data)
 	{
 		StringBuilder sb = new StringBuilder();
@@ -132,10 +147,12 @@ public class FileDigester extends SwingWorker<Void, Void> implements PropertyCha
 		}
 		return sb.toString();
 	}
+	
 	private String getMessageDigestString()
 	{
 		return createHexString(messageDigest.digest());
 	}
+	
 	@Override
 	protected void done()
 	{
@@ -150,11 +167,13 @@ public class FileDigester extends SwingWorker<Void, Void> implements PropertyCha
 		progressBar.setValue(PROGRESS_BAR_SIZE);
 		gui.enableInputComponents();
 	}
+	
 	private void updateProgressBar(PropertyChangeEvent event)
 	{
 		int progress = (Integer) event.getNewValue();
 		progressBar.setValue(progress);
 	}
+	
 	@Override
 	public void propertyChange(PropertyChangeEvent event)
 	{

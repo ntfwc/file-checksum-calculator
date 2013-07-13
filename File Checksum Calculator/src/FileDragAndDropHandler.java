@@ -3,23 +3,29 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.util.List;
 import java.io.File;
+
 public class FileDragAndDropHandler extends TransferHandler
 {
 	private static final long serialVersionUID = 9573198412L;
+	
 	private GUI gui;
+	
 	public FileDragAndDropHandler(GUI gui)
 	{
 		this.gui = gui;
 	}
+	
 	private boolean isFileTransfer(TransferHandler.TransferSupport support)
 	{
 		return support.isDataFlavorSupported(DataFlavor.javaFileListFlavor);
 	}
+	
 	@Override
 	public boolean canImport(TransferHandler.TransferSupport support)
 	{
 		return isFileTransfer(support);
 	}
+	
 	@SuppressWarnings("unchecked")
 	private File readTransferable(Transferable transferable)
 	{
@@ -33,6 +39,7 @@ public class FileDragAndDropHandler extends TransferHandler
 		{
 			throw new RuntimeException("Unexpected exception occurred: " + e.getMessage());
 		}
+		
 		File file = fileList.get(0);
 		if (file.isFile())
 		{
@@ -43,6 +50,7 @@ public class FileDragAndDropHandler extends TransferHandler
 			return null;
 		}
 	}
+	
 	@Override
 	public boolean importData(TransferHandler.TransferSupport support)
 	{
