@@ -56,6 +56,7 @@ public class GUI extends JPanel implements ActionListener
 				}
 			}
 		}
+		algorithmsSet.add("CRC32");
 		
 		List<String> algorithmsList = new ArrayList<String>();
 		algorithmsList.addAll(algorithmsSet);

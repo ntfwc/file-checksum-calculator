@@ -55,8 +55,14 @@ public class FileDigester extends SwingWorker<Void, Void> implements PropertyCha
 		{
 			throw new Exception("No algorithm selected");
 		}
-		
-		this.dataDigester = new MessageDataDigester(MessageDigest.getInstance(algorithm));
+		if (algorithm == "CRC32")
+		{
+			this.dataDigester = new CRC32DataDigester();
+		}
+		else
+		{
+			this.dataDigester = new MessageDataDigester(MessageDigest.getInstance(algorithm));
+		}
 		this.fileInputStream = getInputStreamForFile(file);
 		this.exception = null;
 		recordFileSize(file);
