@@ -2,6 +2,9 @@ import javax.swing.SwingWorker;
 import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.JOptionPane;
+
+import org.ntfwc.lib.UnsignedConversion;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
@@ -49,20 +52,25 @@ public class FileDigester extends SwingWorker<Void, Void> implements PropertyCha
 		return new BufferedInputStream(new FileInputStream(file));
 	}
 	
+	private DataDigester getDataDigester(String algorithmName) throws Exception
+	{
+		if (algorithmName == "CRC32")
+		{
+			return new CRC32DataDigester();
+		}
+		else
+		{
+			return new MessageDataDigester(MessageDigest.getInstance(algorithmName));
+		}
+	}
+	
 	private void doDigest(File file, String algorithm) throws Exception
 	{
 		if (algorithm == null)
 		{
 			throw new Exception("No algorithm selected");
 		}
-		if (algorithm == "CRC32")
-		{
-			this.dataDigester = new CRC32DataDigester();
-		}
-		else
-		{
-			this.dataDigester = new MessageDataDigester(MessageDigest.getInstance(algorithm));
-		}
+		this.dataDigester = getDataDigester(algorithm);
 		this.fileInputStream = getInputStreamForFile(file);
 		this.exception = null;
 		recordFileSize(file);

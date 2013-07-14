@@ -1,5 +1,7 @@
 import java.util.zip.CRC32;
 
+import org.ntfwc.lib.UnsignedConversion;
+
 
 public class CRC32DataDigester implements DataDigester {
 	private final CRC32 crcDigester = new CRC32();

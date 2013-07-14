@@ -1,3 +1,4 @@
+package org.ntfwc.lib;
 public final class UnsignedConversion
 {
 	public static final short MAX_UNSIGNED_BYTE = 255;
