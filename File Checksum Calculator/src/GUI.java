@@ -32,6 +32,8 @@ public class GUI extends JPanel implements ActionListener
 	private JLabel currentFileLabel;
 	private JFileChooser fileChooser = new JFileChooser();
 	
+	private FileDragAndDropHandler fileDragAndDropHandler;
+	
 	private void addDigestButton()
 	{
 		this.digestButton = new JButton("Choose File");
@@ -124,7 +126,8 @@ public class GUI extends JPanel implements ActionListener
 	public GUI()
 	{
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		setTransferHandler(new FileDragAndDropHandler(this));
+		this.fileDragAndDropHandler = new FileDragAndDropHandler(this);
+		setTransferHandler(fileDragAndDropHandler);
 		addComponents();
 	}
 	
@@ -132,6 +135,7 @@ public class GUI extends JPanel implements ActionListener
 	{
 		digestButton.setEnabled(true);
 		algorithmSelector.setEnabled(true);
+		fileDragAndDropHandler.setEnabled(true);
 	}
 	
 	private File askUserForFile()
@@ -150,6 +154,7 @@ public class GUI extends JPanel implements ActionListener
 	{
 		digestButton.setEnabled(false);
 		algorithmSelector.setEnabled(false);
+		fileDragAndDropHandler.setEnabled(false);
 	}
 	
 	private void clearOutputBox()

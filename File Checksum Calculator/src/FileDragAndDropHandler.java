@@ -2,6 +2,7 @@ import javax.swing.TransferHandler;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.io.File;
 
 public class FileDragAndDropHandler extends TransferHandler
@@ -9,10 +10,16 @@ public class FileDragAndDropHandler extends TransferHandler
 	private static final long serialVersionUID = 9573198412L;
 	
 	private GUI gui;
+	private AtomicBoolean enabled = new AtomicBoolean(true);
 	
 	public FileDragAndDropHandler(GUI gui)
 	{
 		this.gui = gui;
+	}
+	
+	public void setEnabled(boolean disabled)
+	{
+		this.enabled.set(disabled);
 	}
 	
 	private boolean isFileTransfer(TransferHandler.TransferSupport support)
@@ -23,7 +30,7 @@ public class FileDragAndDropHandler extends TransferHandler
 	@Override
 	public boolean canImport(TransferHandler.TransferSupport support)
 	{
-		return isFileTransfer(support);
+		return isFileTransfer(support) && enabled.get();
 	}
 	
 	@SuppressWarnings("unchecked")
