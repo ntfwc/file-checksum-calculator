@@ -1,6 +1,8 @@
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import org.ntfwc.lib.LookAndFeelManagement;
+
 public class Main
 {
 	
@@ -20,8 +22,11 @@ public class Main
 		frame.setVisible(true);
 	}
 	
+	
+	
 	public static void main(String[] args)
 	{
+		LookAndFeelManagement.setupNativeLookAndFeel();
 		SwingUtilities.invokeLater(new Runnable() {public void run() {createAndStartGUI(); }});
 	}
 }
