@@ -33,7 +33,7 @@ import dataDigesters.GnuCryptoDigester;
 
 public class GnuCryptoImplementationFetcher implements ImplementationFetcher {
 	private String algorithmName;
-	public static String[] algorithmNames = {
+	public static final String[] algorithmNames = {
 			"MD2",
 			"MD4",
 			"MD5",
