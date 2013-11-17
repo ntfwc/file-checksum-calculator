@@ -14,6 +14,11 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.*/
 
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
@@ -21,6 +26,20 @@ import org.ntfwc.lib.LookAndFeelManagement;
 
 public class Main
 {
+	private static final String ICON_PATH = "icons/icon.png";
+	
+	private static void addIcon(JFrame frame)
+	{
+		try
+		{
+			Image iconImage = ImageIO.read(new File(ICON_PATH));
+			frame.setIconImage(iconImage);
+		}
+		catch (IOException e)
+		{
+			System.out.println("Warning: Icon not found");
+		}
+	}
 	
 	private static JFrame setUpJFrame()
 	{
@@ -28,6 +47,7 @@ public class Main
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GUI gui = new GUI();
 		frame.setContentPane(gui);
+		addIcon(frame);
 		frame.pack();
 		return frame;
 	}
