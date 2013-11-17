@@ -13,6 +13,7 @@ import dataDigesters.DataDigester;
 
 import implementationFetchers.BuiltInImplementationsFetcher;
 import implementationFetchers.CRC32ImplementationFetcher;
+import implementationFetchers.GnuCryptoImplementationFetcher;
 import implementationFetchers.ImplementationFetcher;
 
 
@@ -49,6 +50,12 @@ public class DigestImplementationManager {
 		for (String algorithmName : builtInAlgorithmNames)
 		{
 			implementationDictionary.put(algorithmName + " (built-in)", new BuiltInImplementationsFetcher(algorithmName));
+		}
+		
+		String[] gnuCryptoAlgorithmNames = GnuCryptoImplementationFetcher.algorithmNames;
+		for (String algorithmName : gnuCryptoAlgorithmNames)
+		{
+			implementationDictionary.put(algorithmName + " (Gnu Crypto)", new GnuCryptoImplementationFetcher(algorithmName));
 		}
 	}
 	
