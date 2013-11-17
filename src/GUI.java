@@ -27,13 +27,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.security.Security;
-import java.security.Provider;
 import java.io.File;
 
 public class GUI extends JPanel implements ActionListener
@@ -50,6 +43,8 @@ public class GUI extends JPanel implements ActionListener
 	private JFileChooser fileChooser = new JFileChooser();
 	private FileDragAndDropHandler fileDragAndDropHandler;
 	
+	public final DigestImplementationManager digestImplementationManager = new DigestImplementationManager();
+	
 	private void addDigestButton()
 	{
 		this.digestButton = new JButton("Choose File");
@@ -59,32 +54,9 @@ public class GUI extends JPanel implements ActionListener
 		add(digestButton);
 	}
 	
-	private String[] getAvailableDigestAlgorithms()
-	{
-		Set<String> algorithmsSet = new HashSet<String>();
-		Provider[] providers = Security.getProviders();
-		for (Provider provider : providers)
-		{
-			Set<Provider.Service> services = provider.getServices();
-			for (Provider.Service service : services)
-			{
-				if (service.getType() == "MessageDigest")
-				{
-					algorithmsSet.add(service.getAlgorithm());
-				}
-			}
-		}
-		algorithmsSet.add("CRC32");
-		
-		List<String> algorithmsList = new ArrayList<String>();
-		algorithmsList.addAll(algorithmsSet);
-		Collections.sort(algorithmsList);
-		return algorithmsList.toArray(new String[algorithmsList.size()]);
-	}
-	
 	private void addAlgorithmSelector()
 	{
-		String[] selections = getAvailableDigestAlgorithms();
+		String[] selections = digestImplementationManager.getImplementationNames();
 		this.algorithmSelector = new JComboBox<String>(selections);
 		algorithmSelector.setAlignmentX(Component.CENTER_ALIGNMENT);
 		algorithmSelector.setMaximumSize(algorithmSelector.getPreferredSize());

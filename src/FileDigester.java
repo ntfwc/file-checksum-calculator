@@ -21,13 +21,14 @@ import javax.swing.JOptionPane;
 
 import org.ntfwc.lib.UnsignedConversion;
 
+import dataDigesters.DataDigester;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import java.io.InputStream;
-import java.security.MessageDigest;
 import java.io.IOException;
 
 public class FileDigester extends SwingWorker<Void, Void> implements PropertyChangeListener
@@ -68,25 +69,13 @@ public class FileDigester extends SwingWorker<Void, Void> implements PropertyCha
 		return new BufferedInputStream(new FileInputStream(file));
 	}
 	
-	private DataDigester getDataDigester(String algorithmName) throws Exception
+	private void doDigest(File file, String implementationName) throws Exception
 	{
-		if (algorithmName == "CRC32")
+		if (implementationName == null)
 		{
-			return new CRC32DataDigester();
+			throw new Exception("No implementation selected");
 		}
-		else
-		{
-			return new MessageDataDigester(MessageDigest.getInstance(algorithmName));
-		}
-	}
-	
-	private void doDigest(File file, String algorithm) throws Exception
-	{
-		if (algorithm == null)
-		{
-			throw new Exception("No algorithm selected");
-		}
-		this.dataDigester = getDataDigester(algorithm);
+		this.dataDigester = gui.digestImplementationManager.getImplementation(implementationName);
 		this.fileInputStream = getInputStreamForFile(file);
 		this.exception = null;
 		recordFileSize(file);
@@ -104,11 +93,11 @@ public class FileDigester extends SwingWorker<Void, Void> implements PropertyCha
 		showErrorMessage(e.getMessage());
 	}
 	
-	public void digest(File file, String algorithm)
+	public void digest(File file, String implementationName)
 	{
 		try
 		{
-			doDigest(file, algorithm);
+			doDigest(file, implementationName);
 		}
 		catch (Exception exception)
 		{

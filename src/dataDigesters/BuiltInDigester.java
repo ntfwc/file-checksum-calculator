@@ -1,3 +1,4 @@
+package dataDigesters;
 /*  Copyright (C) 2013 ntfwc<ntfwc@yahoo.com>
 
     This program is free software; you can redistribute it and/or modify
@@ -17,10 +18,11 @@
 import java.security.MessageDigest;
 
 
-public class MessageDataDigester implements DataDigester {
+
+public class BuiltInDigester implements DataDigester {
 	private final MessageDigest messageDigest;
 	
-	public MessageDataDigester(MessageDigest messageDigest)
+	public BuiltInDigester(MessageDigest messageDigest)
 	{
 		this.messageDigest = messageDigest;
 	}
