@@ -1,4 +1,3 @@
-package dataDigesters;
 /*  Copyright (C) 2013 ntfwc<ntfwc@yahoo.com>
 
     This program is free software; you can redistribute it and/or modify
@@ -15,6 +14,7 @@ package dataDigesters;
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.*/
 
+package dataDigesters;
 
 public interface DataDigester {
 	public void update(byte[] data, int offset, int len);
