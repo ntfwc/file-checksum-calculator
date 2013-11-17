@@ -1,4 +1,5 @@
 Version: 2.0
+Gnu Crypto version: 2.0.1
 
 Building and Running
 --------------------------------
