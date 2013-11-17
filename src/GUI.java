@@ -27,13 +27,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.security.Security;
-import java.security.Provider;
 import java.io.File;
 
 public class GUI extends JPanel implements ActionListener
@@ -43,12 +36,14 @@ public class GUI extends JPanel implements ActionListener
 	
 	private JButton digestButton;
 	private JComboBox<String> algorithmSelector;
-	private JTextField outputBox;
+	private JTextField checksumDisplay;
 	private JProgressBar progressBar;
-	private JLabel currentFileLabel;
-	private JFileChooser fileChooser = new JFileChooser();
+	private JLabel currentFileIndicator;
 	
+	private JFileChooser fileChooser = new JFileChooser();
 	private FileDragAndDropHandler fileDragAndDropHandler;
+	
+	public final DigestImplementationManager digestImplementationManager = new DigestImplementationManager();
 	
 	private void addDigestButton()
 	{
@@ -59,32 +54,9 @@ public class GUI extends JPanel implements ActionListener
 		add(digestButton);
 	}
 	
-	private String[] getAvailableDigestAlgorithms()
-	{
-		Set<String> algorithmsSet = new HashSet<String>();
-		Provider[] providers = Security.getProviders();
-		for (Provider provider : providers)
-		{
-			Set<Provider.Service> services = provider.getServices();
-			for (Provider.Service service : services)
-			{
-				if (service.getType() == "MessageDigest")
-				{
-					algorithmsSet.add(service.getAlgorithm());
-				}
-			}
-		}
-		algorithmsSet.add("CRC32");
-		
-		List<String> algorithmsList = new ArrayList<String>();
-		algorithmsList.addAll(algorithmsSet);
-		Collections.sort(algorithmsList);
-		return algorithmsList.toArray(new String[algorithmsList.size()]);
-	}
-	
 	private void addAlgorithmSelector()
 	{
-		String[] selections = getAvailableDigestAlgorithms();
+		String[] selections = digestImplementationManager.getImplementationNames();
 		this.algorithmSelector = new JComboBox<String>(selections);
 		algorithmSelector.setAlignmentX(Component.CENTER_ALIGNMENT);
 		algorithmSelector.setMaximumSize(algorithmSelector.getPreferredSize());
@@ -98,21 +70,21 @@ public class GUI extends JPanel implements ActionListener
 		add(label);
 	}
 	
-	private void addCurrentFileLabel()
+	private void addCurrentFileIndicator()
 	{
-		this.currentFileLabel = new JLabel(" ");
-		currentFileLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		add(currentFileLabel);
+		this.currentFileIndicator = new JLabel(" ");
+		currentFileIndicator.setAlignmentX(Component.CENTER_ALIGNMENT);
+		add(currentFileIndicator);
 	}
 	
-	private void addOutputBox()
+	private void addChecksumDisplay()
 	{
-		this.outputBox = new JTextField();
-		outputBox.setEditable(false);
-		outputBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-		outputBox.setPreferredSize(new Dimension(300, outputBox.getPreferredSize().height));
-		outputBox.setMaximumSize(new Dimension(1000, outputBox.getPreferredSize().height));
-		add(outputBox);
+		this.checksumDisplay = new JTextField();
+		checksumDisplay.setEditable(false);
+		checksumDisplay.setAlignmentX(Component.CENTER_ALIGNMENT);
+		checksumDisplay.setPreferredSize(new Dimension(300, checksumDisplay.getPreferredSize().height));
+		checksumDisplay.setMaximumSize(new Dimension(1000, checksumDisplay.getPreferredSize().height));
+		add(checksumDisplay);
 	}
 	
 	private void addProgressBar()
@@ -134,8 +106,8 @@ public class GUI extends JPanel implements ActionListener
 		addLabel("Drag a file here or");
 		addDigestButton();
 		addEmptySpace(20);
-		addCurrentFileLabel();
-		addOutputBox();
+		addCurrentFileIndicator();
+		addChecksumDisplay();
 		addProgressBar();
 	}
 	
@@ -175,15 +147,15 @@ public class GUI extends JPanel implements ActionListener
 	
 	private void clearOutputBox()
 	{
-		outputBox.setText(null);
+		checksumDisplay.setText(null);
 	}
 	
 	public void digestFile(File file)
 	{
 		clearOutputBox();
 		disableInputComponents();
-		currentFileLabel.setText("Current file: " + file.toString());
-		FileDigester fileDigester = new FileDigester(this, progressBar, outputBox);
+		currentFileIndicator.setText("Current file: " + file.toString());
+		FileDigester fileDigester = new FileDigester(this, progressBar, checksumDisplay);
 		fileDigester.digest(file, (String) algorithmSelector.getSelectedItem());
 	}
 	

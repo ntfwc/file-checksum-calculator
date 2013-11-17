@@ -14,13 +14,17 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.*/
 
+package dataDigesters;
+
+
 import java.security.MessageDigest;
 
 
-public class MessageDataDigester implements DataDigester {
+
+public class BuiltInDigester implements DataDigester {
 	private final MessageDigest messageDigest;
 	
-	public MessageDataDigester(MessageDigest messageDigest)
+	public BuiltInDigester(MessageDigest messageDigest)
 	{
 		this.messageDigest = messageDigest;
 	}

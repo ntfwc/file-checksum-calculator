@@ -14,8 +14,32 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.*/
 
+package implementationFetchers;
 
-public interface DataDigester {
-	public void update(byte[] data, int offset, int len);
-	public byte[] digest();
+import java.security.MessageDigest;
+
+import dataDigesters.BuiltInDigester;
+import dataDigesters.DataDigester;
+
+public class BuiltInImplementationsFetcher implements ImplementationFetcher{
+	private String algorithmName;
+	
+	public BuiltInImplementationsFetcher(String algorithmName)
+	{
+		this.algorithmName = algorithmName;
+	}
+
+	@Override
+	public DataDigester getImplementation() 
+	{
+		try
+		{
+			return new BuiltInDigester(MessageDigest.getInstance(algorithmName));
+		}
+		catch (Exception e)
+		{
+			throw new RuntimeException(e.getMessage());
+		}
+	}
+	
 }

@@ -14,35 +14,37 @@
     with this program; if not, write to the Free Software Foundation, Inc.,
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.*/
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
+package dataDigesters;
 
-import org.ntfwc.lib.LookAndFeelManagement;
+import java.util.zip.CRC32;
 
-public class Main
-{
+import org.ntfwc.lib.UnsignedConversion;
+
+
+
+public class CRC32DataDigester implements DataDigester {
+	private final CRC32 crcDigester = new CRC32();
 	
-	private static JFrame setUpJFrame()
+	@Override
+	public void update(byte[] data, int offset, int len) {
+		crcDigester.update(data, offset, len);
+	}
+
+	private byte[] getIntBytes(int integer)
 	{
-		JFrame frame = new JFrame("File Checksum Calculator");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		GUI gui = new GUI();
-		frame.setContentPane(gui);
-		frame.pack();
-		return frame;
+		byte[] bytes = new byte[4];
+		bytes[0] = (byte) (integer >> 24);
+		bytes[1] = (byte) (integer >> 16);
+		bytes[2] = (byte) (integer >> 8);
+		bytes[3] = (byte) integer;
+		
+		return bytes;
 	}
 	
-	private static void createAndStartGUI()
-	{
-		JFrame frame = setUpJFrame();
-		frame.setVisible(true);
+	@Override
+	public byte[] digest() {
+		int digestValue = UnsignedConversion.convertToSigned(crcDigester.getValue());
+		return getIntBytes(digestValue);
 	}
-	
-	
-	
-	public static void main(String[] args)
-	{
-		LookAndFeelManagement.setupNativeLookAndFeel();
-		SwingUtilities.invokeLater(new Runnable() {public void run() {createAndStartGUI(); }});
-	}
+
 }
