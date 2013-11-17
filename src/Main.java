@@ -15,8 +15,8 @@
     51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.*/
 
 import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -26,18 +26,24 @@ import org.ntfwc.lib.LookAndFeelManagement;
 
 public class Main
 {
-	private static final String ICON_PATH = "icons/icon.png";
+	private static final String ICON_PATH = "data/icon.png";
 	
 	private static void addIcon(JFrame frame)
 	{
 		try
 		{
-			Image iconImage = ImageIO.read(new File(ICON_PATH));
+			URL iconUrl = GUI.class.getResource(ICON_PATH);
+			if (iconUrl == null)
+			{
+				System.out.println("Warning: Icon not found");
+				return;
+			}
+			Image iconImage = ImageIO.read(iconUrl);
 			frame.setIconImage(iconImage);
 		}
 		catch (IOException e)
 		{
-			System.out.println("Warning: Icon not found");
+			System.out.println("Warning: Icon could not be read");
 		}
 	}
 	
