@@ -43,11 +43,11 @@ public class GUI extends JPanel implements ActionListener
 	
 	private JButton digestButton;
 	private JComboBox<String> algorithmSelector;
-	private JTextField outputBox;
+	private JTextField checksumDisplay;
 	private JProgressBar progressBar;
-	private JLabel currentFileLabel;
-	private JFileChooser fileChooser = new JFileChooser();
+	private JLabel currentFileIndicator;
 	
+	private JFileChooser fileChooser = new JFileChooser();
 	private FileDragAndDropHandler fileDragAndDropHandler;
 	
 	private void addDigestButton()
@@ -98,21 +98,21 @@ public class GUI extends JPanel implements ActionListener
 		add(label);
 	}
 	
-	private void addCurrentFileLabel()
+	private void addCurrentFileIndicator()
 	{
-		this.currentFileLabel = new JLabel(" ");
-		currentFileLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-		add(currentFileLabel);
+		this.currentFileIndicator = new JLabel(" ");
+		currentFileIndicator.setAlignmentX(Component.CENTER_ALIGNMENT);
+		add(currentFileIndicator);
 	}
 	
-	private void addOutputBox()
+	private void addChecksumDisplay()
 	{
-		this.outputBox = new JTextField();
-		outputBox.setEditable(false);
-		outputBox.setAlignmentX(Component.CENTER_ALIGNMENT);
-		outputBox.setPreferredSize(new Dimension(300, outputBox.getPreferredSize().height));
-		outputBox.setMaximumSize(new Dimension(1000, outputBox.getPreferredSize().height));
-		add(outputBox);
+		this.checksumDisplay = new JTextField();
+		checksumDisplay.setEditable(false);
+		checksumDisplay.setAlignmentX(Component.CENTER_ALIGNMENT);
+		checksumDisplay.setPreferredSize(new Dimension(300, checksumDisplay.getPreferredSize().height));
+		checksumDisplay.setMaximumSize(new Dimension(1000, checksumDisplay.getPreferredSize().height));
+		add(checksumDisplay);
 	}
 	
 	private void addProgressBar()
@@ -134,8 +134,8 @@ public class GUI extends JPanel implements ActionListener
 		addLabel("Drag a file here or");
 		addDigestButton();
 		addEmptySpace(20);
-		addCurrentFileLabel();
-		addOutputBox();
+		addCurrentFileIndicator();
+		addChecksumDisplay();
 		addProgressBar();
 	}
 	
@@ -175,15 +175,15 @@ public class GUI extends JPanel implements ActionListener
 	
 	private void clearOutputBox()
 	{
-		outputBox.setText(null);
+		checksumDisplay.setText(null);
 	}
 	
 	public void digestFile(File file)
 	{
 		clearOutputBox();
 		disableInputComponents();
-		currentFileLabel.setText("Current file: " + file.toString());
-		FileDigester fileDigester = new FileDigester(this, progressBar, outputBox);
+		currentFileIndicator.setText("Current file: " + file.toString());
+		FileDigester fileDigester = new FileDigester(this, progressBar, checksumDisplay);
 		fileDigester.digest(file, (String) algorithmSelector.getSelectedItem());
 	}
 	
