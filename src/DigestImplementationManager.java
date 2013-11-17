@@ -16,12 +16,9 @@
 
 import java.security.Provider;
 import java.security.Security;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -52,10 +49,13 @@ public class DigestImplementationManager {
 			}
 		}
 		
-		List<String> algorithmsList = new ArrayList<String>();
-		algorithmsList.addAll(algorithmsSet);
-		Collections.sort(algorithmsList);
-		return algorithmsList.toArray(new String[algorithmsList.size()]);
+		//For some reason my Java implementation gives SHA1 two names, so we will remove one.
+		if (algorithmsSet.contains("SHA") && algorithmsSet.contains("SHA1"))
+		{
+			algorithmsSet.remove("SHA");
+		}
+		
+		return algorithmsSet.toArray(new String[algorithmsSet.size()]);
 	}
 	
 	private void populateImplementationDictionary()
